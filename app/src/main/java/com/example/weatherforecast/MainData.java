@@ -12,7 +12,7 @@ public class MainData {
     private double temp_kf;
 
     public double getTemp() {
-        return temp;
+        return temp - 273.15;
     }
 
     public double getFeels_like() {

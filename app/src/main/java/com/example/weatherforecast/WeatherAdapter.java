@@ -44,8 +44,8 @@ public class WeatherAdapter extends BaseAdapter {
         }
         cityBinding = CityBinding.bind(tmp);
         WeatherItem wI = getWeather(i);
-        cityBinding.textCity.setText("Date: " + wI.getDt_txt());
-        cityBinding.textTemp.setText("Temperature: " + wI.getMain().getTemp());
+        cityBinding.textCity.setText("Дата: " + wI.getDt_txt());
+        cityBinding.textTemp.setText("Температура: " +  String.format("%.2f",wI.getMain().getTemp())+ "°");
 //        cityBinding.textTemp.setText("Temperature: " + String.format("%.2f",wI.getMain().getTemp()) + "°");
         return tmp;
     }

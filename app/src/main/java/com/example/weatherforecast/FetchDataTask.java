@@ -1,6 +1,7 @@
 package com.example.weatherforecast;
 
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -17,16 +18,21 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 public class FetchDataTask extends AsyncTask<Void, Void, String> {
-    private String Url = "https://api.openweathermap.org/data/2.5/forecast?q=Moscow&appid=a1c34ffcfd0d837993551913ad415dc0";
-//    private static final String Url = "https://api.openweathermap.org/data/2.5/forecast?lat=44.34&lon=10.99&appid=a1c34ffcfd0d837993551913ad415dc0";
+    private String Url = "https://api.openweathermap.org/data/2.5/forecast?q=Moscow&lang=ru&appid=a1c34ffcfd0d837993551913ad415dc0";
+    //    private static final String Url = "https://api.openweathermap.org/data/2.5/forecast?lat=44.34&lon=10.99&appid=a1c34ffcfd0d837993551913ad415dc0";
 //    private static final String Url = "https://api.openweathermap.org/data/2.5/weather?lat=55.7522200&lon=37.6155600&appid=a1c34ffcfd0d837993551913ad415dc0";
 //    private static final String URL = "https://api.vk.com/method/users.get";
+    double latitude;
+    double longitude;
+    private DataHandle activity;
 
-    private MainActivity mainActivity;
+    public FetchDataTask(DataHandle activity, String city, double latitude, double longitude, RequestType requestType) {
+        this.activity = activity;
+        if (requestType == RequestType.CITY)
+            this.Url = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&lang=ru&appid=a1c34ffcfd0d837993551913ad415dc0";
+        else if (requestType == RequestType.COORD)
+            this.Url = "https://api.openweathermap.org/data/2.5/forecast?lat=" + latitude + "&lon=" + longitude + "&lang=ru&appid=a1c34ffcfd0d837993551913ad415dc0";
 
-    public FetchDataTask(MainActivity mainActivity, String city) {
-        this.mainActivity = mainActivity;
-        this.Url = "https://api.openweathermap.org/data/2.5/forecast?q="+city+"&appid=a1c34ffcfd0d837993551913ad415dc0";
     }
 
     @Override
@@ -62,7 +68,7 @@ public class FetchDataTask extends AsyncTask<Void, Void, String> {
     @Override
     protected void onPostExecute(String xmlData) {
         if (xmlData != null) {
-            mainActivity.onDataFetched(xmlData);
+            activity.onDataFetched(xmlData);
             Log.d("XMLData", xmlData);
         } else {
             Log.e("Error", "Failed to fetch data from the server");

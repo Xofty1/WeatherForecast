@@ -25,7 +25,8 @@ import java.util.List;
 import com.google.gson.Gson;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements DataHandle{
+
     private static final String URL = "http://worldweather.wmo.int/ru/json/206_ru.xml";
     ActivityMainBinding binding;
     private final static String FILE_NAME = "weather.json";
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     View.OnClickListener fetch = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            new FetchDataTask(MainActivity.this, city).execute();
+            new FetchDataTask(MainActivity.this, city,0,0,RequestType.CITY).execute();
         }
     };
 
@@ -68,9 +69,16 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        new FetchDataTask(this, city).execute();// для динамеческой работы
+        new FetchDataTask(this, city, 0,0,RequestType.CITY).execute();// для динамеческой работы
         binding.buttonFetch.setOnClickListener(fetch);
         binding.editTextCityName.addTextChangedListener(cityChanged);
+        Intent intent = new Intent(this, MapActivity.class);
+        binding.buttonMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(intent);
+            }
+        });
     }
 
 
