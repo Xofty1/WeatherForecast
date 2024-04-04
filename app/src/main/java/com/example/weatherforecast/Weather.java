@@ -6,5 +6,9 @@ public class Weather {
     private String description;
     private String icon;
 
+    public String getIcon() {
+        return icon;
+    }
+
     // Геттеры и сеттеры
 }

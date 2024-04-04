@@ -60,11 +60,10 @@ public class MapActivity extends AppCompatActivity implements InputListener, Dat
     };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        MapKitFactory.initialize(this);
         super.onCreate(savedInstanceState);
-        if (savedInstanceState == null) {
-            MapKitFactory.setApiKey("a075c213-cf50-41fb-994d-60f735f08f1b");
-            MapKitFactory.initialize(this);
-        }
+
         mapBinding = ActivityMapBinding.inflate(getLayoutInflater());
         View view = mapBinding.getRoot();
         setContentView(view);

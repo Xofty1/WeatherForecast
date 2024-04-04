@@ -13,6 +13,10 @@ public class WeatherItem {
     private Sys sys;
     private String dt_txt;
 
+    public ArrayList<Weather> getWeather() {
+        return weather;
+    }
+
     public MainData getMain() {
         return main;
     }

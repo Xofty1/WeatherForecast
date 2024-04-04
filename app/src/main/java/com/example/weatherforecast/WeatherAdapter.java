@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-
+import com.squareup.picasso.Picasso;
 import com.example.weatherforecast.databinding.CityBinding;
 
 import java.util.ArrayList;
@@ -46,6 +46,7 @@ public class WeatherAdapter extends BaseAdapter {
         WeatherItem wI = getWeather(i);
         cityBinding.textCity.setText("Дата: " + wI.getDt_txt());
         cityBinding.textTemp.setText("Температура: " +  String.format("%.2f",wI.getMain().getTemp())+ "°");
+        Picasso.get().load("https://openweathermap.org/img/wn/"+ wI.getWeather().get(0).getIcon()+"@2x.png").into(cityBinding.imageWeather);
 //        cityBinding.textTemp.setText("Temperature: " + String.format("%.2f",wI.getMain().getTemp()) + "°");
         return tmp;
     }
