@@ -1,3 +1,4 @@
+
 package com.example.weatherforecast;
 
 
@@ -7,10 +8,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,9 +16,8 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class FetchDataTask extends AsyncTask<Void, Void, String> {
-    private String Url = "https://api.openweathermap.org/data/2.5/forecast?q=Moscow&lang=ru&appid=a1c34ffcfd0d837993551913ad415dc0";
-    private String UrlCurrentWeather = "https://api.openweathermap.org/data/2.5/weather?q=Moscow&lang=ru&appid=a1c34ffcfd0d837993551913ad415dc0";
+public class FetchCurrentData extends AsyncTask<Void, Void, String> {
+    private String Url = "https://api.openweathermap.org/data/2.5/weather?q=Moscow&lang=ru&appid=a1c34ffcfd0d837993551913ad415dc0";
     //    private static final String Url = "https://api.openweathermap.org/data/2.5/forecast?lat=44.34&lon=10.99&appid=a1c34ffcfd0d837993551913ad415dc0";
 //    private static final String Url = "https://api.openweathermap.org/data/2.5/weather?lat=55.7522200&lon=37.6155600&appid=a1c34ffcfd0d837993551913ad415dc0";
 //    private static final String URL = "https://api.vk.com/method/users.get";
@@ -30,16 +26,14 @@ public class FetchDataTask extends AsyncTask<Void, Void, String> {
     private DataHandle activity;
 
     private Context context;
-    public FetchDataTask(Context context, DataHandle activity, String city, double latitude, double longitude, RequestType requestType) {
+
+    public FetchCurrentData(Context context, DataHandle activity, String city, double latitude, double longitude, RequestType requestType) {
         this.activity = activity;
         this.context = context;
         if (requestType == RequestType.CITY) {
-            this.Url = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&lang=ru&appid=a1c34ffcfd0d837993551913ad415dc0";
-            this.UrlCurrentWeather = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&lang=ru&appid=a1c34ffcfd0d837993551913ad415dc0";
-        }
-        else if (requestType == RequestType.COORD) {
-            this.Url = "https://api.openweathermap.org/data/2.5/forecast?lat=" + latitude + "&lon=" + longitude + "&lang=ru&appid=a1c34ffcfd0d837993551913ad415dc0";
-            this.UrlCurrentWeather = "https://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude + "&lang=ru&appid=a1c34ffcfd0d837993551913ad415dc0";
+            this.Url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&lang=ru&appid=a1c34ffcfd0d837993551913ad415dc0";
+        } else if (requestType == RequestType.COORD) {
+            this.Url = "https://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude + "&lang=ru&appid=a1c34ffcfd0d837993551913ad415dc0";
         }
     }
 
@@ -78,7 +72,7 @@ public class FetchDataTask extends AsyncTask<Void, Void, String> {
     @Override
     protected void onPostExecute(String xmlData) {
         if (xmlData != null) {
-            activity.onDataFetched(xmlData);
+            activity.onCurrentDataFetched(xmlData);
             Log.d("XMLData", xmlData);
         } else {
             Toast.makeText(context, "Ошибка получения данных", Toast.LENGTH_LONG).show();

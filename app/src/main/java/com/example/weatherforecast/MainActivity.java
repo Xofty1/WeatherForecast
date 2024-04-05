@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -23,24 +24,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 
-public class MainActivity extends AppCompatActivity implements DataHandle{
-
-    private static final String URL = "http://worldweather.wmo.int/ru/json/206_ru.xml";
+public class MainActivity extends AppCompatActivity implements DataHandle {
     ActivityMainBinding binding;
-    private final static String FILE_NAME = "weather.json";
-    WeatherData weatherData;
     WeatherLongData weatherLongData;
-    static String info = "{\"coord\":{\"lon\":37.6177,\"lat\":55.752},\"weather\":[{\"id\":803,\"main\":\"Clouds\",\"description\":\"broken clouds\",\"icon\":\"04d\"}],\"base\":\"stations\",\"main\":{\"temp\":290.51,\"feels_like\":290,\"temp_min\":289.31,\"temp_max\":291.73,\"pressure\":1004,\"humidity\":65,\"sea_level\":1004,\"grnd_level\":986},\"visibility\":10000,\"wind\":{\"speed\":2.82,\"deg\":182,\"gust\":5.78},\"clouds\":{\"all\":68},\"dt\":1712045001,\"sys\":{\"type\":2,\"id\":2000314,\"country\":\"RU\",\"sunrise\":1712026621,\"sunset\":1712074122},\"timezone\":10800,\"id\":524901,\"name\":\"Moscow\",\"cod\":200}";
-    static String weather;
-    ArrayList<WeatherData> weatherDataArrayList = new ArrayList<>();
+    WeatherData weatherData;
+    String currentWeather;
+    String weather;
     String city = "Moscow";
     private View headerView = null;
     View.OnClickListener fetch = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            new FetchDataTask(MainActivity.this, city,0,0,RequestType.CITY).execute();
+            if (TextUtils.isEmpty(binding.editTextCityName.getText())) {
+                binding.editTextCityName.setText("Moscow");
+                city = "Moscow";
+            }
+            new FetchCurrentData(MainActivity.this, MainActivity.this, city, 0, 0, RequestType.CITY).execute();
+            new FetchDataTask(MainActivity.this, MainActivity.this, city, 0, 0, RequestType.CITY).execute();
         }
     };
 
@@ -69,14 +72,33 @@ public class MainActivity extends AppCompatActivity implements DataHandle{
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        new FetchDataTask(this, city, 0,0,RequestType.CITY).execute();// для динамеческой работы
+
         binding.buttonFetch.setOnClickListener(fetch);
         binding.editTextCityName.addTextChangedListener(cityChanged);
-        Intent intent = new Intent(this, MapActivity.class);
+        Intent intent = getIntent();
+        weather = intent.getStringExtra("data");
+        if (weather != null) {
+            onDataFetched(weather);
+            new FetchCurrentData(MainActivity.this, MainActivity.this, city, 0, 0, RequestType.CITY).execute();
+
+        } else {
+            new FetchCurrentData(MainActivity.this, MainActivity.this, city, 0, 0, RequestType.CITY).execute();
+            new FetchDataTask(this, this, city, 0, 0, RequestType.CITY).execute();// для динамеческой работы
+        }
+        Intent intentToMap = new Intent(this, MapActivity.class);
         binding.buttonMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(intent);
+                intentToMap.putExtra("data", weather);
+                startActivity(intentToMap);
+            }
+        });
+        Intent intentToCurrentWeather = new Intent(this, CurrentWeatherActivity.class);
+        binding.buttonToCurrentWeather.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intentToCurrentWeather.putExtra("city", weatherLongData.getCity().getName());
+                startActivity(intentToCurrentWeather);
             }
         });
     }
@@ -87,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements DataHandle{
             weather = xmlData;
             Gson gson = new Gson();
             weatherLongData = gson.fromJson(weather, WeatherLongData.class);
-//            weatherDataArrayList.add(weatherLongData);
+            //                  weatherDataArrayList.add(weatherLongData);
             WeatherAdapter wA = new WeatherAdapter(weatherLongData.getList(), this);
 //            WeatherAdapter wA = new WeatherAdapter(weatherDataArrayList, this);
             binding.lvMain.setAdapter(wA);
@@ -104,9 +126,17 @@ public class MainActivity extends AppCompatActivity implements DataHandle{
             Log.e("Error", "Failed 23 to fetch data from the server");
         }
     }
+
+    @Override
+    public void onCurrentDataFetched(String xmlData) {
+
+    }
+
+
     private void updateHeader(View header, String cityName) {
         ((TextView) header.findViewById(R.id.textViewCity)).setText(cityName);
     }
+
     View createHeader(String text) {
         View v = getLayoutInflater().inflate(R.layout.header, null);
         ((TextView) v.findViewById(R.id.textViewCity)).setText(text);

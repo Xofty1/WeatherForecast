@@ -14,5 +14,8 @@ public class City {
         return name;
     }
 
-    // Геттеры и сеттеры
+    public Coord getCoord() {
+        return coord;
+    }
+// Геттеры и сеттеры
 }

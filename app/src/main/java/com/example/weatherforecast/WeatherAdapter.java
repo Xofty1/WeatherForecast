@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import com.squareup.picasso.Picasso;
 import com.example.weatherforecast.databinding.CityBinding;
-
+import android.util.Log;
 import java.util.ArrayList;
 
 public class WeatherAdapter extends BaseAdapter {
@@ -44,8 +44,16 @@ public class WeatherAdapter extends BaseAdapter {
         }
         cityBinding = CityBinding.bind(tmp);
         WeatherItem wI = getWeather(i);
-        cityBinding.textCity.setText("Дата: " + wI.getDt_txt());
+        String[] date = wI.getDt_txt().split(" ");
+        Log.d("mmm", date[0]);
+        Log.d("mmm", date[1]);
+
+        cityBinding.textDate.setText("Дата: " + date[0]);
+        cityBinding.textTime.setText("Время: " + date[1]);
         cityBinding.textTemp.setText("Температура: " +  String.format("%.2f",wI.getMain().getTemp())+ "°");
+        cityBinding.textFeelLike.setText("Чувствуется как: " + String.format("%.2f",wI.getMain().getFeels_like())+ "°");
+        cityBinding.textHumidity.setText("Влажность: " + wI.getMain().getHumidity() + "%");
+        cityBinding.textPressure.setText("Давление: " + String.format("%.2f",wI.getMain().getPressure())+ " мм рт.ст.");
         Picasso.get().load("https://openweathermap.org/img/wn/"+ wI.getWeather().get(0).getIcon()+"@2x.png").into(cityBinding.imageWeather);
 //        cityBinding.textTemp.setText("Temperature: " + String.format("%.2f",wI.getMain().getTemp()) + "°");
         return tmp;

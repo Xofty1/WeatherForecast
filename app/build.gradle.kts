@@ -42,6 +42,8 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10")
     implementation ("com.squareup.picasso:picasso:2.71828")
     implementation("com.yandex.android:maps.mobile:4.5.1-lite")
+    implementation("androidx.navigation:navigation-fragment:2.7.7")
+    implementation("androidx.navigation:navigation-ui:2.7.7")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
