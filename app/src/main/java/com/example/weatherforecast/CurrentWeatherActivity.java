@@ -65,6 +65,7 @@ public class CurrentWeatherActivity extends AppCompatActivity implements DataHan
         binding.buttonToWeather.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                intentToWeather.putExtra("city", weatherData.getName());
                 startActivity(intentToWeather);
             }
         });

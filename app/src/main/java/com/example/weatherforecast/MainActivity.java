@@ -72,19 +72,9 @@ public class MainActivity extends AppCompatActivity implements DataHandle {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-
         binding.buttonFetch.setOnClickListener(fetch);
         binding.editTextCityName.addTextChangedListener(cityChanged);
-        Intent intent = getIntent();
-        weather = intent.getStringExtra("data");
-        if (weather != null) {
-            onDataFetched(weather);
-            new FetchCurrentData(MainActivity.this, MainActivity.this, city, 0, 0, RequestType.CITY).execute();
-
-        } else {
-            new FetchCurrentData(MainActivity.this, MainActivity.this, city, 0, 0, RequestType.CITY).execute();
-            new FetchDataTask(this, this, city, 0, 0, RequestType.CITY).execute();// для динамеческой работы
-        }
+        displayInfo();
         Intent intentToMap = new Intent(this, MapActivity.class);
         binding.buttonMap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,7 +93,20 @@ public class MainActivity extends AppCompatActivity implements DataHandle {
         });
     }
 
-
+public void displayInfo(){
+    Intent intent = getIntent();
+    weather = intent.getStringExtra("data");
+    city = intent.getStringExtra("city");
+    if (weather != null) {
+        onDataFetched(weather);
+    } else {
+        if (city == null)
+        {
+            city = "Moscow";
+        }
+        new FetchDataTask(this, this, city, 0, 0, RequestType.CITY).execute();// для динамеческой работы
+    }
+}
     public void onDataFetched(String xmlData) {
         if (xmlData != null) {
             weather = xmlData;
