@@ -11,15 +11,30 @@
         android:id="@+id/lvMain"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonFetch" />
 
+<!--    <EditText-->
+<!--        android:id="@+id/editTextCityName"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:ems="10"-->
+<!--        android:hint="Enter City"-->
+<!--        android:inputType="text"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.5"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
     <EditText
         android:id="@+id/editTextCityName"
-        android:layout_width="wrap_content"
+        style="@style/SearchEditTextStyle"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:ems="10"
         android:hint="Enter City"
         android:inputType="text"
@@ -30,9 +45,10 @@
 
     <Button
         android:id="@+id/buttonFetch"
+        style="@style/RoundedButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="75dp"
         android:text="Weather"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -41,20 +57,24 @@
 
     <Button
         android:id="@+id/buttonMap"
+        style="@style/RoundedButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="308dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginStart="300dp"
+        android:layout_marginTop="75dp"
         android:text="Map"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/buttonToCurrentWeather"
+        style="@style/RoundedButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="75dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
         android:text="Current\nWeather"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

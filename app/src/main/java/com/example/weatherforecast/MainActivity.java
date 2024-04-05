@@ -1,10 +1,12 @@
 package com.example.weatherforecast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -33,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements DataHandle {
     WeatherData weatherData;
     String currentWeather;
     String weather;
-    String city = "Moscow";
+    String city;
     private View headerView = null;
     View.OnClickListener fetch = new View.OnClickListener() {
         @Override
@@ -42,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements DataHandle {
                 binding.editTextCityName.setText("Moscow");
                 city = "Moscow";
             }
-            new FetchCurrentData(MainActivity.this, MainActivity.this, city, 0, 0, RequestType.CITY).execute();
             new FetchDataTask(MainActivity.this, MainActivity.this, city, 0, 0, RequestType.CITY).execute();
         }
     };
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements DataHandle {
         setContentView(view);
         binding.buttonFetch.setOnClickListener(fetch);
         binding.editTextCityName.addTextChangedListener(cityChanged);
-        displayInfo();
+        displayInfo(savedInstanceState);
         Intent intentToMap = new Intent(this, MapActivity.class);
         binding.buttonMap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,25 +94,46 @@ public class MainActivity extends AppCompatActivity implements DataHandle {
         });
     }
 
-public void displayInfo(){
-    Intent intent = getIntent();
-    weather = intent.getStringExtra("data");
-    city = intent.getStringExtra("city");
-    if (weather != null) {
-        onDataFetched(weather);
-    } else {
-        if (city == null)
-        {
-            city = "Moscow";
-        }
-        new FetchDataTask(this, this, city, 0, 0, RequestType.CITY).execute();// для динамеческой работы
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        city = savedInstanceState.getString("city");
+        if (city != null)
+            Log.d("city", city);
     }
-}
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.d("city", city);
+        outState.putString("city", city);
+    }
+
+    public void displayInfo(Bundle savedInstanceState) {
+        Intent intent = getIntent();
+        weather = intent.getStringExtra("data");
+        if (savedInstanceState != null)
+            city = savedInstanceState.getString("city");
+        else
+            city = intent.getStringExtra("city");
+
+//Log.d("city", city);
+        if (weather != null) {
+            onDataFetched(weather);
+        } else {
+            if (city == null)
+                city = "Moscow";
+            new FetchDataTask(this, this, city, 0, 0, RequestType.CITY).execute();// для динамеческой работы
+        }
+    }
+
+
     public void onDataFetched(String xmlData) {
         if (xmlData != null) {
             weather = xmlData;
             Gson gson = new Gson();
             weatherLongData = gson.fromJson(weather, WeatherLongData.class);
+            city = weatherLongData.getCity().getName();
             //                  weatherDataArrayList.add(weatherLongData);
             WeatherAdapter wA = new WeatherAdapter(weatherLongData.getList(), this);
 //            WeatherAdapter wA = new WeatherAdapter(weatherDataArrayList, this);

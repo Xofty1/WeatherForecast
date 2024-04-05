@@ -62,9 +62,15 @@ public class MapActivity extends AppCompatActivity implements InputListener, Dat
         mapView = mapBinding.mapView;
         mapView.getMap().move(new CameraPosition(new Point(latitude, longitude), 5.0F, 0.0F, 0.0F));
         mapView.getMap().addInputListener(this);
-        Intent intent = getIntent();
-        weather = intent.getStringExtra("data");
-        onDataFetched(weather);
+        if (savedInstanceState != null) {
+            weather = savedInstanceState.getString("weather");
+            onDataFetched(weather);
+        }
+        else {
+            Intent intent = getIntent();
+            weather = intent.getStringExtra("data");
+            onDataFetched(weather);
+        }
         if (weather != null)
             mapView.getMap().move(new CameraPosition(new Point(weatherLongData.getCity().getCoord().getLat(), weatherLongData.getCity().getCoord().getLon()), 5.0F, 0.0F, 0.0F));
         Intent intentToSearch = new Intent(this, MainActivity.class);
@@ -138,5 +144,17 @@ public class MapActivity extends AppCompatActivity implements InputListener, Dat
 
     private void updateHeader(View header, String cityName) {
         ((TextView) header.findViewById(R.id.textViewCity)).setText(cityName);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        weather = savedInstanceState.getString("weather");
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("weather", weather);
     }
 }

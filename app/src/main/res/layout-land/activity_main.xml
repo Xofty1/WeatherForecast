@@ -18,6 +18,7 @@
 
     <EditText
         android:id="@+id/editTextCityName"
+        style="@style/SearchEditTextStyle"
         android:layout_width="153dp"
         android:layout_height="45dp"
         android:layout_marginStart="16dp"
@@ -29,21 +30,36 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-    android:id="@+id/buttonFetch"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="56dp"
-    android:layout_marginTop="260dp"
-    android:text="Magic"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/buttonToCurrentWeather"
+        style="@style/RoundedButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="270dp"
+        android:text="Current\nWeather"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/buttonMap"
+        android:id="@+id/buttonFetch"
+        style="@style/RoundedButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
-        android:layout_marginTop="324dp"
+        android:layout_marginTop="212dp"
+        android:text="Magic"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonMap"
+        style="@style/RoundedButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="336dp"
         android:text="Map"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

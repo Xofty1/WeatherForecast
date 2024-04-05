@@ -1,5 +1,6 @@
 package com.example.weatherforecast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 
 import com.example.weatherforecast.databinding.ActivityCurrentWeatherBinding;
@@ -55,8 +57,12 @@ public class CurrentWeatherActivity extends AppCompatActivity implements DataHan
         setContentView(binding.getRoot());
         binding.buttonCurrentWeather.setOnClickListener(fetch);
         binding.editTextCity.addTextChangedListener(cityChanged);
-        Intent intent = getIntent();
-        city = intent.getStringExtra("city");
+        if (savedInstanceState != null)
+            city = savedInstanceState.getString("city");
+        else {
+            Intent intent = getIntent();
+            city = intent.getStringExtra("city");
+        }
         if (city == null)
             city = "Moscow";
         new FetchCurrentData(this, this, city, 0, 0, RequestType.CITY).execute();
@@ -89,5 +95,19 @@ public class CurrentWeatherActivity extends AppCompatActivity implements DataHan
             binding.textPressure.setText("Давление: " + String.format("%.2f", weatherData.getMain().getPressure()) + " мм рт.ст.");
             Picasso.get().load("https://openweathermap.org/img/wn/" + weatherData.getWeather().get(0).getIcon() + "@2x.png").into(binding.imageWeather);
         }
+    }
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        city = savedInstanceState.getString("city");
+        if (city != null)
+            Log.d("city", city);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.d("city", city);
+        outState.putString("city", city);
     }
 }

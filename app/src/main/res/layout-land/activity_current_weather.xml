@@ -61,9 +61,9 @@
         android:id="@+id/imageWeather"
         android:layout_width="201dp"
         android:layout_height="172dp"
-        android:layout_marginTop="404dp"
+        android:layout_marginTop="180dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.773"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -87,7 +87,7 @@
         style="@style/RoundedButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="292dp"
+        android:layout_marginStart="560dp"
         android:layout_marginTop="96dp"
         android:text="Weather"
         app:layout_constraintStart_toStartOf="parent"
